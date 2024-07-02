@@ -1,7 +1,7 @@
 # ObfuscationStrategyOptimizer
 
 
-
+This is the repository for the PrivateNLP@ACL 2024 Fifth Workshop on Privacy in Natural Language Processing paper, ["Improving Authorship Privacy: Adaptive Obfuscation with the Dynamic Selection of Techniques"](url)
 
 
 
