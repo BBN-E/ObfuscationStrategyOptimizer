@@ -67,13 +67,22 @@ from ~4 minutes to ~30 seconds on a V100).
 
 ## Data
 
-`data/README.md` covers all three corpora (EBG/AMT, Blog, HRS-HIATUS), the
-JSONL format every script reads, and how to convert the pickled Mutant-X
-distributions:
+Two of the paper's three corpora ship with this repository, in the 10-author
+versions it reports on and already in the JSONL format every script reads — no
+preprocessing step:
 
-```bash
-python scripts/prepare_datasets.py --dataset_dir data/amt-10 --source amt
-```
+| Directory | Corpus | Authors | Train / Test docs |
+| --- | --- | --- | --- |
+| `data/amt-10/` | Extended Brennan-Greenstadt (EBG) | 10 | 120 / 49 |
+| `data/blog-10/` | Blog Authorship Corpus | 10 | 800 / 200 |
+
+`X_test.jsonl` is obfuscated and reported on; `X_train.jsonl` trains the
+attribution classifier that Delta Acc. is measured against, and is never
+obfuscated.
+
+The HRS-HIATUS datasets behind Table 2 come through the IARPA HIATUS program
+rather than publicly, so they are not included. `data/README.md` has the record
+format, the corpus details and how to point the HRS evaluation at them.
 
 ## Running it
 
@@ -238,6 +247,26 @@ Note two differences between what is written here and the numbers above:
 
 The candidates are sampled (`do_sample`, temperature 0.7), so the generated text
 differs run to run even at a fixed seed on different hardware.
+
+### Checking your setup
+
+Scoring the shipped corpora against themselves reproduces the `Original` rows of
+Tables 1 and 2 without generating anything, which is a quick way to confirm the
+metrics and data are wired up correctly:
+
+```bash
+python -m oso.metrics.run_metrics \
+    --orig_jsonl data/amt-10/X_test.jsonl \
+    --obf_jsonl data/amt-10/X_test.jsonl \
+    --out_file /tmp/check.csv
+```
+
+`aa_distance` must come out at 0, and `meaning_similarity` and `meteor` at 1 —
+text is being compared with itself. The mean `orig_fluency` should land near the
+CoLA figure the paper gives for that corpus: **0.88** for AMT and **0.78** for
+Blog. Those two differ because AMT paragraphs are written to a prompt while blog
+entries are informal, so a CoLA score that does not separate them points at the
+sentence splitting rather than at the classifier.
 
 ## Layout
 

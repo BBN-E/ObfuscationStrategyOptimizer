@@ -31,10 +31,12 @@ import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from oso.utils import fopen, logger, setup_logging
+from oso.utils import fopen, get_sentences, logger, setup_logging
 
+# en_core_web_sm carries the word vectors that the meaning-similarity filter
+# needs; document splitting goes through oso.utils so that the sentences here
+# line up index-for-index with the ones the metrics compare against.
 nlp = spacy.load("en_core_web_sm")
-nlp.add_pipe("sentencizer")
 
 
 def set_seed(seed):
@@ -134,10 +136,7 @@ def query_llama_json(input_jsonl, output_path, llama_model_path, num_passes, fil
                 author_ids = obj["authorIDs"]
                 document_id = obj["documentID"]
 
-                if "sentences" in obj:
-                    sentences = {i: obj["sentences"][i]["text"] for i in sorted(obj["sentences"].keys())}
-                else:
-                    sentences = {i: str(s) for i, s in enumerate(nlp(obj["fullText"]).sents)}
+                sentences = dict(enumerate(get_sentences(obj)))
 
                 rephrased = {pass_num: {} for pass_num in range(1, num_passes + 1)}
                 for sent_idx, sentence in sentences.items():

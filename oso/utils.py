@@ -79,15 +79,43 @@ def author_key(record):
     return str(tuple(ids))
 
 
+_SENTENCIZER = None
+
+
+def _sentencize(text):
+    """Split raw text into sentences with spaCy's rule-based sentencizer.
+
+    The same splitter the obfuscation systems use, so a document split here
+    lines up index-for-index with the sentences a system emits for it.
+    """
+    global _SENTENCIZER
+    if _SENTENCIZER is None:
+        import spacy
+        from spacy.lang.en import English
+
+        nlp = English()
+        nlp.add_pipe("sentencizer")
+        _SENTENCIZER = nlp
+
+    # The sentencizer has no length ceiling of its own, but spaCy's Doc does;
+    # blog entries run to ~11k words, so raise it to fit the longest of them.
+    _SENTENCIZER.max_length = max(getattr(_SENTENCIZER, "max_length", 10 ** 6), len(text) + 1)
+    return [sent.text.strip() for sent in _SENTENCIZER(text).sents if sent.text.strip()]
+
+
 def get_sentences(record, text_field="fullText"):
     """Return the document's sentences as a list of strings.
 
-    Uses the pre-computed ``sentences`` map when present (obfuscation systems
-    operate sentence by sentence and keep the alignment), otherwise falls back
-    to splitting ``fullText`` on newlines.
+    Uses the pre-computed ``sentences`` map when present -- obfuscation systems
+    rewrite sentence by sentence and record the result there, which is what
+    keeps an obfuscated document aligned with its original. Raw corpora have no
+    such field, so their text is sentencized on the fly. Newlines alone are not
+    enough: blog entries arrive as a single unbroken paragraph, and treating one
+    as a single "sentence" would collapse the per-sentence fluency and meaning
+    metrics into one truncated blob.
     """
     sentences = record.get("sentences")
     if sentences:
         ordered = sorted(sentences.items(), key=lambda item: int(item[0]))
         return [sent["text"] for _, sent in ordered]
-    return [line for line in record[text_field].split("\n") if line.strip()]
+    return _sentencize(record[text_field])

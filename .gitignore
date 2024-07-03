@@ -16,10 +16,11 @@ results/
 *.pkl
 *.sav
 
-# Data (see data/README.md)
-data/**/*.jsonl
+# The AMT and Blog corpora are committed (see data/README.md); ignore
+# any additional data dropped in alongside them.
 data/**/*.pickle
 data/**/*.npy
+data/hrs/
 
 # Local tool settings
 .claude/settings.local.json
