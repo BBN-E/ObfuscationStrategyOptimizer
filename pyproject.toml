@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "obfuscation-strategy-optimizer"
+version = "0.1.0"
+description = "Obfuscation Strategy Optimizer (OSO): adaptive authorship obfuscation with dynamic selection of techniques"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Hemanth Kandula" },
+    { name = "Damianos Karakos" },
+    { name = "Haoling Qiu" },
+    { name = "Brian Ulicny" },
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Paper = "https://aclanthology.org/2024.privatenlp-1.14/"
+Repository = "https://github.com/BBN-E/ObfuscationStrategyOptimizer"
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["oso*", "obfuscation_systems*"]
+
+[tool.setuptools.package-data]
+"oso.evaluation" = ["writeprints_resources/*.txt"]

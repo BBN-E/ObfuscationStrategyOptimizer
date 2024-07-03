@@ -1,0 +1,23 @@
+# Core
+torch>=2.0
+transformers>=4.35
+tokenizers>=0.14
+numpy>=1.23
+pandas>=1.5
+scikit-learn>=1.2
+tqdm>=4.65
+
+# Metrics
+evaluate>=0.4          # METEOR
+nltk>=3.8              # METEOR's tokenizer/wordnet backend
+sentencepiece>=0.1.99
+spacy>=3.5             # sentence splitting; needs en_core_web_sm
+sortedcontainers>=2.4  # Writeprints-Static features
+
+# LLM Rewriting candidate (GPTQ-quantized Llama-2)
+optimum>=1.14
+auto-gptq>=0.5
+accelerate>=0.24
+
+# Reporting
+tabulate>=0.9

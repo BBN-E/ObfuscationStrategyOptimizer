@@ -1,0 +1,6 @@
+{
+  "Machine Translation": "metrics/amt-10/mt.csv",
+  "STEER Style Transfer": "metrics/amt-10/steer.csv",
+  "Llama-2 7B": "metrics/amt-10/llama2_pass_1.csv",
+  "Recursive Llama-2 7B": "metrics/amt-10/llama2_pass_2.csv"
+}

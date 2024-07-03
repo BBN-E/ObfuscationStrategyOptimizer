@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.idea/
+.vscode/
+.ipynb_checkpoints/
+
+# Experiment artifacts
+work/
+obf/
+metrics/
+results/
+*.pkl
+*.sav
+
+# Data (see data/README.md)
+data/**/*.jsonl
+data/**/*.pickle
+data/**/*.npy
+
+# Local tool settings
+.claude/settings.local.json

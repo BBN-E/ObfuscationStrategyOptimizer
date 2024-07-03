@@ -1,0 +1,6 @@
+{
+  "Machine Translation": "obf/amt-10/mt.jsonl",
+  "STEER Style Transfer": "obf/amt-10/steer.jsonl",
+  "Llama-2 7B": "obf/amt-10/llama2_pass_1.jsonl",
+  "Recursive Llama-2 7B": "obf/amt-10/llama2_pass_2.jsonl"
+}
